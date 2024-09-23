@@ -5,8 +5,7 @@ program.exitOverride();
 
 start({
     prompt: 'Pokedex> ',
-    ignoreUndefined: true,
-    eval: (cmd, context, filename, callback) => {
+    eval: async(cmd, context, filename, callback) => {
         const args = cmd.trim().split(' ');
         if (args.includes('-h') || args.includes('--help')) {
             program.outputHelp();
@@ -19,10 +18,10 @@ start({
             return;
         }
         try {
-            program.parseAsync(args, { from: 'user' });
-            callback(null, undefined);
+            await program.parseAsync(args, { from: 'user' });
+            callback(null);
         } catch (err) {
-            callback(null, undefined);
+            callback(null);
         }
     }
 });

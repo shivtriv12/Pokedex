@@ -1,6 +1,12 @@
 import { Command } from 'commander';
+import { fetchLocations } from './api.js';
 
 const program = new Command();
+const config = {
+    next: null,
+    previous: null
+};
+const limit = 20;
 
 program
     .name('Pokedex')
@@ -14,11 +20,42 @@ exitCmd
         process.exit(0);
     });
 
-const helpCmd = program.command('help');
-helpCmd
-    .description('Display help msg')
-    .action(() => {
-        program.outputHelp();
-    });
+program
+    .command('map')
+    .description('Show next 20 location areas')
+    .action(async () => {
+        const url = config.next || `https://pokeapi.co/api/v2/location-area/?limit=${limit}`;
+        const data = await fetchLocations(url);
 
+        if (data) {
+            config.next = data.next;
+            config.previous = data.previous;
+
+            console.log('Next 20 locations:');
+            data.results.forEach((location, index) => {
+                console.log(`${index + 1}. ${location.name}`);
+            });
+        } else {
+            console.log('No more locations available.');
+        }
+    });
+program
+    .command('mapb')
+    .description('Show previous 20 location areas')
+    .action(async () => {
+        if (config.previous) {
+            const data = await fetchLocations(config.previous);
+            if (data) {
+                config.next = data.next;
+                config.previous = data.previous;
+
+                console.log('Previous 20 locations:');
+                data.results.forEach((location, index) => {
+                    console.log(`${index + 1}. ${location.name}`);
+                });
+            }
+        } else {
+            console.log('You are already at the beginning of the list.');
+        }
+    });
 export default program;
