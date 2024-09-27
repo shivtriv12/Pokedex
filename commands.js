@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { fetchLocations } from './api.js';
+import { fetchLocations,fetchPokemonInArea } from './api.js';
 
 const program = new Command();
 const config = {
@@ -58,4 +58,21 @@ program
             console.log('You are already at the beginning of the list.');
         }
     });
+
+program
+    .command('explore <area_name>')
+    .description('Explore a location area to find Pokémon')
+    .action(async (areaName) => {
+        const data = await fetchPokemonInArea(areaName);
+
+        if (data) {
+            console.log(`Pokémon found in ${areaName}:`);
+            data.pokemon_encounters.forEach((encounter, index) => {
+                console.log(`${index + 1}. ${encounter.pokemon.name}`);
+            });
+        } else {
+            console.log('No Pokémon data available for this area.');
+        }
+    });
+
 export default program;
