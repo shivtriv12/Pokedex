@@ -39,8 +39,14 @@ async function fetchPokemonInArea(areaName) {
 }
 
 async function fetchPokemon(pokemonName) {
+    const cached = cache.get(pokemonName.toLowerCase());
+    if (cached.found) {
+        console.log('Serving from cache for Pokémon:', pokemonName);
+        return JSON.parse(cached.data);
+    }
     try {
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+        cache.add(pokemonName.toLowerCase(), JSON.stringify(response.data));
         return response.data;
     } catch (error) {
         console.error(`Error fetching Pokémon data: ${error}`);
