@@ -1,5 +1,5 @@
 import { Command } from 'commander';
-import { fetchLocations,fetchPokemonInArea } from './api.js';
+import { fetchLocations,fetchPokemonInArea,fetchPokemon } from './api.js';
 
 const program = new Command();
 const config = {
@@ -7,6 +7,7 @@ const config = {
     previous: null
 };
 const limit = 20;
+const userPokedex = new Map();
 
 program
     .name('Pokedex')
@@ -72,6 +73,30 @@ program
             });
         } else {
             console.log('No Pokémon data available for this area.');
+        }
+    });
+
+program
+    .command('catch <pokemon_name>')
+    .description('Catch a Pokémon by name')
+    .action(async (pokemonName) => {
+        const data = await fetchPokemon(pokemonName);
+
+        if (!data) {
+            console.log(`Pokémon ${pokemonName} not found.`);
+            return;
+        }
+
+        const baseExperience = data.base_experience;
+        const catchChance = Math.random();
+
+        const probability = Math.max(0.1, 1 - baseExperience / 100);
+
+        if (catchChance <= probability) {
+            userPokedex.set(pokemonName, data);
+            console.log(`Congratulations! You caught ${data.name}!`);
+        } else {
+            console.log(`Oh no! ${data.name} escaped!`);
         }
     });
 
