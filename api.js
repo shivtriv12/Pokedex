@@ -53,5 +53,4 @@ async function fetchPokemon(pokemonName) {
         return null;
     }
 }
-
 export {fetchLocations,fetchPokemonInArea,fetchPokemon};

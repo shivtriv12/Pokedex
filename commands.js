@@ -151,5 +151,4 @@ program
             console.log(`- ${pokemon.name}`);
         });
     });
-
 export default program;
