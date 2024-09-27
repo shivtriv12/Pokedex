@@ -32,15 +32,15 @@ To set up the Pokedex CLI on your local machine, follow these steps:
 
 ## Files Overview
 
-# api.js
+### api.js
 This file handles API requests to the PokeAPI. It includes functions to fetch data about locations, Pokémon in specific areas, and individual Pokémon. It implements a caching mechanism to store API responses and reduce the number of requests.
 
-# command.js
+### command.js
 This file contains the command definitions and their respective actions for the CLI. It allows users to catch Pokémon, inspect caught Pokémon, explore locations, and view the list of caught Pokémon.
 
-# main.js
+### main.js
 This file initializes the REPL (Read-Eval-Print Loop) for the CLI. It sets up the prompt and handles user input, including parsing commands and providing help and version information.
 
-# pokecache.js
+### pokecache.js
 This file implements a caching system for storing API responses. It defines the Cache class to manage cache entries, including adding, retrieving, and automatically cleaning up expired entries.
 
